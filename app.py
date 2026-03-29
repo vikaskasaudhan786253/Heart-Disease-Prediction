@@ -5,8 +5,10 @@ import numpy as np
 from randomforest import Random_Forest
 from logisticregression import Logistic_Regression
 from decisiontree import Decision_Tree
+from metrics import Metrics
+
 def decision_tree(values):
-    dt = Random_Forest()
+    dt = Decision_Tree()
     st.write("Accuracy Score : " + str(dt.accuracy()) + "%")
     st.write("Precision Score : " + str(dt.precision()) + "%")
     st.write("Recall Score : " + str(dt.recall()) + "%")
@@ -89,21 +91,33 @@ thallium = st.sidebar.selectbox("Select Thalassemia :",('Normal','Fixed Defect',
 thallium_map = {'Normal':3,'Fixed Defect':6,'Reversible Defect':7}
 thallium_val = thallium_map.get(thallium, None)
 
+# Model Comparison
+st.header("Heart Disease Prediction using Machine Learning")
+algorithms = ("Logistic Regression","Decision Tree", "Random Forest")
+st.subheader("Model Comparison")
+metric = Metrics()
+model = {
+    'accuracy':metric.Accuracy(),
+    'precision':metric.Precision(),
+    'recall':metric.Recall(),
+    'f1_score':metric.F1_score(),
+    'roc_auc':metric.Roc_Auc()
+}
+df = pd.DataFrame(model,index=list(algorithms))
+st.write(df)
 
-# Algorithm Selection
-selected_algo = st.sidebar.selectbox("Select a Algorithm", ("Logistic Regression","Decision Tree", "Random Forest", "Support Vector Machine", "K-Nearest Neighbors", "Naive Bayes", "Gradient Boosting", "XGBoost", "LightGBM", "CatBoost"))
 
 values = [[age,gender_value,chest_pain_type_value,bp,cholesterol,bool_value,ekg_value,hr,eia_value,st_depression_val,slope_st_value,num_vessels,thallium_val]]
 selected_values = {'Age':age, 'Sex':gender, 'Chest pain type':chest_pain_type, 'BP':bp, 'Cholesterol':cholesterol, 'FBS over 120':bool,
        'EKG results':ekg, 'Max HR':hr, 'Exercise angina':eia, 'ST depression':st_depression_val,
        'Slope of ST':slope_st, 'Number of vessels fluro':num_vessels, 'Thallium':thallium}
 new_df = pd.DataFrame(selected_values,index=[[0]])
+selected_algo = st.sidebar.selectbox("Select a Algorithm",algorithms )
 btn = st.sidebar.button("Run Algorithm")
-st.header("Heart Disease Prediction using Machine Learning")
-st.subheader("Selected Algorithm: " + selected_algo)
 
 # Running Algorithm
 if btn:
+    st.subheader("Selected Algorithm: " + selected_algo)
     if selected_algo == 'Logistic Regression':
         logistic_regression(values)
     elif selected_algo == 'Random Forest':
