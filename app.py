@@ -9,11 +9,6 @@ from metrics import Metrics
 
 def decision_tree(values):
     dt = Decision_Tree()
-    st.write("Accuracy Score : " + str(dt.accuracy()) + "%")
-    st.write("Precision Score : " + str(dt.precision()) + "%")
-    st.write("Recall Score : " + str(dt.recall()) + "%")
-    st.write("F1 Score : " + str(dt.f1_scores()) + "%")
-    st.write("ROC AUC Score : " + str(dt.roc_auc()) + "%")
     pred = dt.predict(values)
     proba = dt.predict_proba(values)
     if pred==1:
@@ -25,11 +20,6 @@ def decision_tree(values):
 
 def random_forest(values):
     rf = Random_Forest()
-    st.write("Accuracy Score : " + str(rf.accuracy()) + "%")
-    st.write("Precision Score : " + str(rf.precision()) + "%")
-    st.write("Recall Score : " + str(rf.recall()) + "%")
-    st.write("F1 Score : " + str(rf.f1_scores()) + "%")
-    st.write("ROC AUC Score : " + str(rf.roc_auc()) + "%")
     pred = rf.predict(values)
     proba = rf.predict_proba(values)
     if pred==1:
@@ -42,11 +32,6 @@ def random_forest(values):
 
 def logistic_regression(values):
     lr = Logistic_Regression()
-    st.write("Accuracy Score : " + str(lr.accuracy()) + "%")
-    st.write("Precision Score : " + str(lr.precision()) + "%")
-    st.write("Recall Score : " + str(lr.recall()) + "%")
-    st.write("F1 Score : " + str(lr.f1_scores()) + "%")
-    st.write("ROC AUC Score : " + str(lr.roc_auc()) + "%")
     pred = lr.predict(values)
     proba = lr.predict_proba(values)
     if pred==1:
