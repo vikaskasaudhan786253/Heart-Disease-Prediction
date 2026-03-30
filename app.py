@@ -100,6 +100,105 @@ new_df = pd.DataFrame(selected_values,index=[[0]])
 selected_algo = st.sidebar.selectbox("Select a Algorithm",algorithms )
 btn = st.sidebar.button("Run Algorithm")
 
+inputs = [age,gender,chest_pain_type,cholesterol,bp,bool,ekg,eia,st_depression_val,slope_st,num_vessels,thallium]
+def show_card(title, value, desc, color="#f0f2f6"):
+    st.markdown(
+        f"""
+        <div style="
+            padding:15px;
+            border-radius:12px;
+            background-color:{color};
+            margin-bottom:10px;
+            box-shadow:0 2px 6px rgba(0,0,0,0.1);
+        ">
+            <h4>{title}</h4>
+            <h2 style="color:#2E86C1;">{value}</h2>
+            <p>{desc}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+def explanation(values):
+    st.subheader("🧾 Description of Selected Values")
+
+    show_card("🎂 Age", f"{values[0]} years",
+              "Age is an important factor in heart disease risk.")
+
+    show_card("🚻 Gender", values[1],
+              "Gender can influence heart disease patterns.")
+
+    cp_desc = {
+        "Typical Angina": "Classic heart-related chest pain.",
+        "Atypical Angina": "Unusual chest pain pattern.",
+        "Non-Anginal Pain": "Not related to heart.",
+        "Asymptomatic": "No symptoms present."
+    }
+    show_card("🫀 Chest Pain", values[2], cp_desc[values[2]])
+
+    chol = values[3]
+    if chol < 200:
+        desc, color = "Healthy level", "#d4edda"
+    elif chol < 240:
+        desc, color = "Borderline high", "#fff3cd"
+    else:
+        desc, color = "High risk", "#f8d7da"
+
+    show_card("🧪 Cholesterol", f"{chol} mg/dL", desc, color)
+
+    bp = values[4]
+    if bp < 120:
+        desc = "Normal"
+    elif bp < 130:
+        desc = "Elevated"
+    else:
+        desc = "High"
+
+    show_card("❤️ Blood Pressure", bp, desc)
+
+    sugar_desc = "High (Diabetes risk)" if values[5] == "Yes" else "Normal"
+    show_card("🍬 Blood Sugar", values[5], sugar_desc)
+
+    ekg_desc = {
+        "Normal": "Normal heart activity",
+        "ST-T wave abnormality": "Possible heart issue",
+        "Left ventricular hypertrophy": "Heart enlargement"
+    }
+    show_card("📈 EKG", values[6], ekg_desc[values[6]])
+
+    eia_desc = "Present (Risk)" if values[7] == "Yes" else "Not present"
+    show_card("🏃 Exercise Angina", values[7], eia_desc)
+
+    st_dep = values[8]
+    if st_dep < 1:
+        desc = "Normal"
+    elif st_dep < 2:
+        desc = "Mild"
+    elif st_dep < 3:
+        desc = "Moderate"
+    else:
+        desc = "Severe"
+
+    show_card("📉 ST Depression", st_dep, desc)
+
+    slope_desc = {
+        "Upsloping": "Normal",
+        "Flat": "Risk",
+        "Downsloping": "High risk"
+    }
+    show_card("📊 ST Slope", values[9], slope_desc[values[9]])
+
+    # 🧬 Vessels
+    show_card("🧬 Major Vessels", values[10],
+              "Higher value → higher blockage risk")
+
+    thal_desc = {
+        "Normal": "No defect",
+        "Fixed Defect": "Permanent issue",
+        "Reversible Defect": "Temporary issue"
+    }
+    show_card("🧪 Thalassemia", values[11], thal_desc[values[11]])
+
+
 # Running Algorithm
 if btn:
     st.subheader("Selected Algorithm: " + selected_algo)
@@ -109,3 +208,5 @@ if btn:
         random_forest(values)
     elif selected_algo == "Decision Tree":
         decision_tree(values)
+
+    explanation(inputs)
